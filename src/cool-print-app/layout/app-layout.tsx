@@ -1,12 +1,14 @@
 import { CSSProperties } from "react";
 import { observable } from "@legendapp/state";
 
+import { Stage, Layer, Text, Rect } from "react-konva";
+
 const Editor = () => {
   return (
     <div style={style}>
       <div style={mainStyle}>
         <div style={toolbarStyle}>
-          <Editor.Toolbar></Editor.Toolbar>
+          <Toolbar></Toolbar>
         </div>
         <div
           style={{
@@ -16,9 +18,9 @@ const Editor = () => {
             flex: 1,
           }}
         >
-          <Editor.MainView></Editor.MainView>
+          <MainView></MainView>
           <div style={controlStyle}>
-            <Editor.Controls></Editor.Controls>
+            <Controls></Controls>
           </div>
         </div>
       </div>
@@ -26,17 +28,35 @@ const Editor = () => {
   );
 };
 
-Editor.Controls = () => {
+const Controls = () => {
   return <div>controls</div>;
 };
 
-Editor.MainView = () => {
-  console.log(appState.get().heigh);
-  return <div>view</div>;
+const MainView = () => {
+  return (
+    <div>
+      <Stage width={appState$.get().width} height={appState$.get().heigh}>
+        <Layer>
+          <Text text="Try click on rect" />
+          <Rect
+            fill="red"
+            x={0}
+            y={0}
+            width={appState$.get().width}
+            height={appState$.get().heigh}
+          ></Rect>
+        </Layer>
+      </Stage>
+    </div>
+  );
 };
 
-Editor.Toolbar = () => {
-  return <div>toolbar</div>;
+const Toolbar = () => {
+  return (
+    <div>
+      W: {appState$.get().width}, H: {appState$.get().heigh}
+    </div>
+  );
 };
 
 const toolbarStyle: CSSProperties = {
@@ -44,9 +64,9 @@ const toolbarStyle: CSSProperties = {
   border: "4px dashed #c6cc2e",
 };
 
-const appState = observable({
-  width: 0,
-  heigh: 0,
+const appState$ = observable({
+  width: 100,
+  heigh: 100,
 });
 
 const controlStyle: CSSProperties = {
